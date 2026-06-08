@@ -11,6 +11,7 @@ jobs:
     runs-on: windows-latest
     env:
       UNITY_VERSION: 6.4
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,11 +26,11 @@ jobs:
           fi
 
       - name: Write Unity license file (decode secret)
-        if: ${{ secrets.UNITY_LICENSE != '' }}
+        if: ${{ env.UNITY_LICENSE != '' }}
         shell: pwsh
         run: |
           $outPath = 'C:\\ProgramData\\Unity\\Unity_lic.ulf'
-          $envVar = '${{ secrets.UNITY_LICENSE }}'
+          $envVar = '${{ env.UNITY_LICENSE }}'
           try {
             $bytes = [System.Convert]::FromBase64String($envVar)
             $text = [System.Text.Encoding]::UTF8.GetString($bytes)
@@ -43,14 +44,14 @@ jobs:
           }
 
       - name: Setup Unity (GameCI)
-        if: ${{ secrets.UNITY_LICENSE != '' }}
+        if: ${{ env.UNITY_LICENSE != '' }}
         uses: game-ci/unity-builder@v2
         with:
           unityVersion: ${{ env.UNITY_VERSION }}
       - name: Restore dependencies
         run: pwsh -NoProfile -Command "dotnet restore" || echo 'no dotnet projects'
       - name: Run headless playmode tests
-        if: ${{ secrets.UNITY_LICENSE != '' }}
+        if: ${{ env.UNITY_LICENSE != '' }}
         run: pwsh tools\run-headless-playtests.ps1 -UnityPath ${{ runner.tool_cache }}/Unity/${{ env.UNITY_VERSION }}/Editor/Unity.exe
       - name: Build Windows player
         if: ${{ secrets.UNITY_LICENSE != '' }}
