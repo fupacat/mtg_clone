@@ -15,6 +15,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true
+
+      - name: Debug secrets
+        run: |
+          if [ -z "${{ secrets.UNITY_LICENSE }}" ]; then
+            echo "UNITY_LICENSE: MISSING"
+          else
+            echo "UNITY_LICENSE: SET"
+          fi
+
       - name: Setup Unity (GameCI)
         if: ${{ secrets.UNITY_LICENSE != '' }}
         uses: game-ci/unity-builder@v2
