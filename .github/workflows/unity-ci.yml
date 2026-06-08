@@ -16,12 +16,15 @@ jobs:
         with:
           lfs: true
       - name: Setup Unity (GameCI)
+        if: ${{ secrets.UNITY_LICENSE != '' }}
         uses: game-ci/unity-builder@v2
         with:
           unityVersion: ${{ env.UNITY_VERSION }}
       - name: Restore dependencies
         run: pwsh -NoProfile -Command "dotnet restore" || echo 'no dotnet projects'
       - name: Run headless playmode tests
+        if: ${{ secrets.UNITY_LICENSE != '' }}
         run: pwsh tools\run-headless-playtests.ps1 -UnityPath ${{ runner.tool_cache }}/Unity/${{ env.UNITY_VERSION }}/Editor/Unity.exe
       - name: Build Windows player
+        if: ${{ secrets.UNITY_LICENSE != '' }}
         run: pwsh tools\build-unity.ps1 -UnityPath ${{ runner.tool_cache }}/Unity/${{ env.UNITY_VERSION }}/Editor/Unity.exe -Target Windows64 -BuildDir build\Windows
