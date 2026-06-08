@@ -24,6 +24,24 @@ jobs:
             echo "UNITY_LICENSE: SET"
           fi
 
+      - name: Write Unity license file (decode secret)
+        if: ${{ secrets.UNITY_LICENSE != '' }}
+        shell: pwsh
+        run: |
+          $outPath = 'C:\\ProgramData\\Unity\\Unity_lic.ulf'
+          $envVar = '${{ secrets.UNITY_LICENSE }}'
+          try {
+            $bytes = [System.Convert]::FromBase64String($envVar)
+            $text = [System.Text.Encoding]::UTF8.GetString($bytes)
+            New-Item -ItemType Directory -Force -Path (Split-Path $outPath) | Out-Null
+            Set-Content -Path $outPath -Value $text -Encoding UTF8
+            Write-Output "Wrote base64-decoded license to $outPath"
+          } catch {
+            New-Item -ItemType Directory -Force -Path (Split-Path $outPath) | Out-Null
+            Set-Content -Path $outPath -Value $envVar -Encoding UTF8
+            Write-Output "Wrote raw license text to $outPath"
+          }
+
       - name: Setup Unity (GameCI)
         if: ${{ secrets.UNITY_LICENSE != '' }}
         uses: game-ci/unity-builder@v2
