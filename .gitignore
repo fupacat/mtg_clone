@@ -1,0 +1,27 @@
+# Unity .gitignore (concise)
+[Ll]ibrary/
+[Tt]emp/
+[Bb]uild/
+[Bb]uilds/
+obj/
+UserSettings/
+MemoryCaptures/
+sysinfo.txt
+/*.csproj
+/*.unityproj
+/*.sln
+/*.suo
+/*.user
+/*.pidb
+/*.userprefs
+/*.booproj
+*.svd
+*.pdb
+*.mdb
+# Unity Cache Server
+Library/**/cache/
+# Crash reports
+crash-reports/
+# OS generated files
+.DS_Store
+Thumbs.db
