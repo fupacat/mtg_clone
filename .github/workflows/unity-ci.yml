@@ -10,7 +10,7 @@ jobs:
   build-and-test:
     runs-on: windows-latest
     env:
-      UNITY_VERSION: 6000.4.10f1
+      UNITY_VERSION: 6000.3.17f1
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
     steps:
       - uses: actions/checkout@v4
