@@ -15,8 +15,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true
-      - name: Setup Unity (community action)
-        uses: webbertakken/setup-unity@v3
+      - name: Setup Unity (GameCI)
+        uses: game-ci/unity-builder@v2
         with:
           unityVersion: ${{ env.UNITY_VERSION }}
       - name: Restore dependencies
