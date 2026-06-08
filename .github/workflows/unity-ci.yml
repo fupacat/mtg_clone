@@ -18,12 +18,13 @@ jobs:
           lfs: true
 
       - name: Debug secrets
+        shell: pwsh
         run: |
-          if [ -z "$UNITY_LICENSE" ]; then
-            echo "UNITY_LICENSE: MISSING"
-          else
-            echo "UNITY_LICENSE: SET"
-          fi
+          if (-not $env:UNITY_LICENSE -or $env:UNITY_LICENSE -eq '') {
+            Write-Output "UNITY_LICENSE: MISSING"
+          } else {
+            Write-Output "UNITY_LICENSE: SET"
+          }
 
       - name: Write Unity license file (decode secret)
         if: ${{ env.UNITY_LICENSE != '' }}
